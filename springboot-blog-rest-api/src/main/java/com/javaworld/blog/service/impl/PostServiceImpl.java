@@ -6,7 +6,8 @@ import com.javaworld.blog.payload.PostDto;
 import com.javaworld.blog.payload.PostResponse;
 import com.javaworld.blog.repository.PostRepository;
 import com.javaworld.blog.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +18,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
     PostRepository postRepository;
+    ModelMapper modelMapper;
 
-    public PostServiceImpl(PostRepository postRepository){
+    /*public PostServiceImpl(PostRepository postRepository){
         this.postRepository=postRepository;
-    }
+    }*/
     @Override
     public PostDto createPost(PostDto postDto) {
         Post post = mapToEntity(postDto);
@@ -87,19 +90,19 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostDto mapToDto(Post post){
-        PostDto postDto = new PostDto();
-        postDto.setId(post.getId());
+        PostDto postDto = modelMapper.map(post,PostDto.class);
+        /*postDto.setId(post.getId());
         postDto.setTitle(post.getTitle());
         postDto.setDescription(post.getDescription());
-        postDto.setContent(post.getContent());
+        postDto.setContent(post.getContent());*/
         return postDto;
     }
     private Post mapToEntity(PostDto postDto){
-        Post post = new Post();
+        Post post = modelMapper.map(postDto,Post.class);
 
-        post.setTitle(postDto.getTitle());
+/*        post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
-        post.setContent(postDto.getContent());
+        post.setContent(postDto.getContent());*/
         return post;
     }
 }
